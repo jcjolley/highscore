@@ -28,19 +28,16 @@ class HighScoreRequestHandler(BaseHTTPRequestHandler):
         self.wfile.write(bytes(out_str, "utf-8"))
         return
 
-
     def setgamesort_command(self, post_data, game, sort):
         print("We're in game sort")
         out_str ="Setting sort for " + game + " to " + sort
         self.wfile.write(bytes(out_str, "utf-8"))
         return
 
-
     def archive_command(self, post_data, game):
         out_str = game + " status set to archived"
         self.wfile.write(bytes(out_str, "utf-8"))
         return
-
 
     def status_command(self, post_data, game=None, sort=None):
         print('In status command')
@@ -52,7 +49,6 @@ class HighScoreRequestHandler(BaseHTTPRequestHandler):
         
         self.wfile.write(bytes(out_str, "utf-8"))
         return
-
 
     def default_command(self, *args):
         return self.status_command(None)
