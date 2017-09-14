@@ -28,6 +28,18 @@ class highScore_RequestHandler(BaseHTTPRequestHandler):
         self.wfile.write(bytes(out_str, "utf-8"))
         return
 
+
+    def setgamesort_command(self, post_data, game, sort):
+        return
+
+    def archive_command(self, post_data, game):
+        return
+
+
+    def status(self, post_data, game=None sort=None):
+        return
+
+
     def parse_command(self, post_data):
         print('Post Text:', post_data['text'])
         my_args = post_data['text'][0].split(" ")
