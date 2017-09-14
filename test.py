@@ -18,9 +18,9 @@ def getScores(cur, game):
               FROM Scores as s 
               JOIN Players as p ON p.ID = s.PlayerID 
               JOIN Games as g ON g.ID = s.GameID 
-              WHERE g.Name = "%s"; """
+              WHERE g.Name = %s; """
 
-    cur.execute(sql, game)
+    cur.execute(sql, (game,))
     score_rows = cur.fetchall()
 
     out_str = "Leaderboard: \n"
