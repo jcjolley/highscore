@@ -73,7 +73,7 @@ class HighScoreRequestHandler(BaseHTTPRequestHandler):
         out_str = "THe default status command"
         if (game): 
             out_str = "Leaderboard for " + game + " is: "
-            out_str + getScores(cur, game)
+            out_str += getScores(cur, game)
         else:
             out_str = "All leaderboards: <TBD>"
         
