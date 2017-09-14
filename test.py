@@ -6,7 +6,7 @@ import urllib
 # HTTPRequestHandler class
 
 
-class highScore_RequestHandler(BaseHTTPRequestHandler):
+class HighScoreRequestHandler(BaseHTTPRequestHandler):
 
     # GET
     def do_GET(self):
@@ -56,7 +56,6 @@ class highScore_RequestHandler(BaseHTTPRequestHandler):
         my_args.pop(0)
         return command(post_data, *my_args)
 
-
     def do_POST(self):
         length = int(self.headers['Content-Length'])
         post_data = urllib.parse.parse_qs(
@@ -74,8 +73,9 @@ def run():
     # Server settings
     # Choose port 8080, for port 80, which is normally used for a http server, you need root access
     server_address = ('127.0.0.1', 8081)
-    httpd = HTTPServer(server_address, highScore_RequestHandler)
+    httpd = HTTPServer(server_address, HighScoreRequestHandler)
     print('running server...')
     httpd.serve_forever()
 
-run()
+if __name__ == '__main__':
+    run()
