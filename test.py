@@ -13,7 +13,7 @@ db = MySQLdb.connect(host="jcjolley.com",
 
 cur = db.cursor()
 
-def: getScores(cur, game):
+def getScores(cur, game):
     get_game_sql = "SELECT id FROM games WHERE name = %s"
     cur.execute(get_game_sql, game)
     rows = cur.fetchall()
@@ -25,8 +25,8 @@ def: getScores(cur, game):
     score_rows = cur.fetchall()
 
     out_str = "Leaderboard: \n"
-    for row in score_rows
-        for col in row
+    for row in score_rows:
+        for col in row:
             out_str + col + " "
         out_str + "\n"
     
