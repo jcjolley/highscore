@@ -29,7 +29,7 @@ class highScore_RequestHandler(BaseHTTPRequestHandler):
             self.rfile.read(length).decode('utf-8'))
         # You now have a dictionary of the post data
         print('POST data: ', post_data)
-        self.wfile.write("Lorem Ipsum".encode("utf-8"))
+        self.wfile.write(bytes("Lorem Ipsum", "utf-8"))
 
 
 def run():
