@@ -2,9 +2,35 @@
 
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import urllib
+import MySQLdb
 
 # HTTPRequestHandler class
 
+db = MySQLdb.connect(host="jcjolley.com",
+                     user="highscores",
+                     passwd="highscores",
+                     db="highscores")
+
+cur = db.cursor()
+
+def: getScores(cur, game):
+    get_game_sql = "SELECT id FROM games WHERE name = %s"
+    cur.execute(get_game_sql, game)
+    rows = cur.fetchall()
+    game_id = rows[0]
+    cur.close()
+
+    get_scores_for_game_sql = "SELECT playerId, score FROM scores WHERE gameId = %s"
+    cur.execute(get_scores_for_game_sql, game_id)
+    score_rows = cur.fetchall()
+
+    out_str = "Leaderboard: \n"
+    for row in score_rows
+        for col in row
+            out_str + col + " "
+        out_str + "\n"
+    
+    return out_str
 
 class HighScoreRequestHandler(BaseHTTPRequestHandler):
 
