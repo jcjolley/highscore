@@ -26,12 +26,12 @@ def getScores(cur, game):
     print('Score rows are: ', score_rows)
 
 
-    out_str = "Leaderboard: "
+    out_str = "Leaderboard: \n"
     for row in score_rows:
         name, score = row
         print("Row is: ", row)
         print ("Name: ", name, "Score: ", score)
-        out_str += name + ": " + str(score)
+        out_str += name + ": " + str(score) + "\n"
     
     return out_str
 
