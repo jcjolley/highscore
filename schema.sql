@@ -7,6 +7,7 @@ CREATE TABLE Teams (
 CREATE TABLE Players (
     ID int NOT NULL AUTO_INCREMENT, 
     TeamID int NOT NULL,
+    SlackID varchar(255) NOT NULL,
     Name varchar(255) NOT NULL,
     PRIMARY KEY (ID),
     FOREIGN KEY (TeamID) REFERENCES Teams(ID)
