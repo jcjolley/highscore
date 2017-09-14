@@ -6,7 +6,7 @@ import urllib
 # HTTPRequestHandler class
 
 
-class highScore_RequestHandler(BaseHTTPRequestHandler):
+class HighScoreRequestHandler(BaseHTTPRequestHandler):
 
     # GET
     def do_GET(self):
@@ -38,7 +38,6 @@ class highScore_RequestHandler(BaseHTTPRequestHandler):
         my_args.pop(0)
         return command(post_data, *my_args)
 
-
     def do_POST(self):
         length = int(self.headers['Content-Length'])
         post_data = urllib.parse.parse_qs(
@@ -60,4 +59,5 @@ def run():
     print('running server...')
     httpd.serve_forever()
 
-run()
+if __name__ == '__main__'
+    run()
