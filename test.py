@@ -25,9 +25,8 @@ def getScores(cur, game):
 
     out_str = "Leaderboard: \n"
     for row in score_rows:
-        for col in row:
-            out_str + col + " "
-        out_str + "\n"
+        name, score = row
+        out_str += name + ": " + str(score) + "\n"
     
     return out_str
 
