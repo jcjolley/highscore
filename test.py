@@ -23,9 +23,14 @@ def getScores(cur, game):
     cur.execute(sql, (game,))
     score_rows = cur.fetchall()
 
+    print('Score rows are: ', score_rows)
+
+
     out_str = "Leaderboard: "
     for row in score_rows:
         name, score = row
+        print("Row is: ", row)
+        print ("Name: ", name, "Score: ", score)
         out_str += name + ": " + str(score)
     
     return out_str
