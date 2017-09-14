@@ -44,7 +44,7 @@ class HighScoreRequestHandler(BaseHTTPRequestHandler):
 
     def status_command(self, post_data, game=None, sort=None):
         print('In status command')
-        out_str = ""
+        out_str = "THe default status command"
         if (game): 
             out_str = "Leaderboard for " + game + " is: <TBD>"
         else:
