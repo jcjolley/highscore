@@ -6,7 +6,7 @@ import MySQLdb
 
 # HTTPRequestHandler class
 
-db = MySQLdb.connect(host="jcjolley.com",
+db = MySQLdb.connect(host="localhost",
                      user="highscores",
                      passwd="highscores",
                      db="highscores")
@@ -14,14 +14,13 @@ db = MySQLdb.connect(host="jcjolley.com",
 cur = db.cursor()
 
 def getScores(cur, game):
-    get_game_sql = "SELECT id FROM games WHERE name = %s"
-    cur.execute(get_game_sql, game)
-    rows = cur.fetchall()
-    game_id = rows[0]
-    cur.close()
+    sql = """ SELECT p.Name, s.Score 
+              FROM Scores as s 
+              JOIN Players as p ON p.ID = s.PlayerID 
+              JOIN Games as g ON g.ID = s.GameID 
+              WHERE g.Name = %s; """
 
-    get_scores_for_game_sql = "SELECT playerId, score FROM scores WHERE gameId = %s"
-    cur.execute(get_scores_for_game_sql, game_id)
+    cur.execute(sql, game)
     score_rows = cur.fetchall()
 
     out_str = "Leaderboard: \n"
@@ -70,11 +69,15 @@ class HighScoreRequestHandler(BaseHTTPRequestHandler):
         out_str = "THe default status command"
         if (game): 
             out_str = "Leaderboard for " + game + " is: <TBD>"
+            out_str + getScores(game)
         else:
             out_str = "All leaderboards: <TBD>"
         
         self.wfile.write(bytes(out_str, "utf-8"))
         return
+
+    def add_command(self, post_data, game):
+        sql = "SELECT * FROM "
 
     def default_command(self, *args):
         return self.status_command(None)
