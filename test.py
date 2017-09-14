@@ -23,10 +23,10 @@ def getScores(cur, game):
     cur.execute(sql, (game,))
     score_rows = cur.fetchall()
 
-    out_str = "Leaderboard: \n"
+    out_str = "Leaderboard: "
     for row in score_rows:
         name, score = row
-        out_str += name + ": " + str(score) + "\n"
+        out_str += name + ": " + str(score)
     
     return out_str
 
@@ -67,7 +67,7 @@ class HighScoreRequestHandler(BaseHTTPRequestHandler):
         print('In status command')
         out_str = "THe default status command"
         if (game): 
-            out_str = "Leaderboard for " + game + " is: <TBD>"
+            out_str = "Leaderboard for " + game + " is: "
             out_str + getScores(cur, game)
         else:
             out_str = "All leaderboards: <TBD>"
