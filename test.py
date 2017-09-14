@@ -29,6 +29,8 @@ class highScore_RequestHandler(BaseHTTPRequestHandler):
             self.rfile.read(length).decode('utf-8'))
         # You now have a dictionary of the post data
         print('POST data: ', post_data)
+        self.send_header('Content-type', 'text/html')
+        self.end_headers()
         self.wfile.write(bytes("<html><body><p>Post Recieved</p></body></html>", "utf-8"))
 
 
