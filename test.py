@@ -36,17 +36,23 @@ class highScore_RequestHandler(BaseHTTPRequestHandler):
         return
 
 
-    def status(self, post_data, game=None sort=None):
+    def status_command(self, post_data, game=None, sort=None):
         return
 
+
+    def default_command(self, *args):
+        return self.status_command
 
     def parse_command(self, post_data):
         print('Post Text:', post_data['text'])
         my_args = post_data['text'][0].split(" ")
         switchMap = {
-            'update' : self.update_command
+            'update' : self.update_command,
+            'setgamesort' : self.setgamesort_command,
+            'archive' : self.archive_command,
+            'status' : self.status_command
         }
-        command = switchMap[my_args[0]]
+        command = switchMap.get(my_args[0], self.default_command)
         my_args.pop(0)
         return command(post_data, *my_args)
 
