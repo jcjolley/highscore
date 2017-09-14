@@ -24,12 +24,12 @@ class highScore_RequestHandler(BaseHTTPRequestHandler):
         return
 
     def update_command(self, post_data, game, score, imgurl=None):
-        out_str = "Congratulations " + post_data['user_name'] + ", Updating highscore for " + game + " to " + score
+        out_str = "Congratulations " + post_data['user_name'][0] + ", Updating highscore for " + game + " to " + score
         self.wfile.write(bytes(out_str, "utf-8"))
         return
 
     def parse_command(self, post_data):
-        print('Post Text:', post_text['text'])
+        print('Post Text:', post_data['text'])
         my_args = post_data['text'][0].split(" ")
         switchMap = {
             'update' : self.update_command
