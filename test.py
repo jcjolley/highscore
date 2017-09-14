@@ -30,29 +30,44 @@ class HighScoreRequestHandler(BaseHTTPRequestHandler):
 
 
     def setgamesort_command(self, post_data, game, sort):
+        print("We're in game sort")
+        out_str ="Setting sort for " + game + " to " + sort
+        self.wfile.write(bytes(out_str, "utf-8"))
         return
 
+
     def archive_command(self, post_data, game):
+        out_str = game + " status set to archived"
+        self.wfile.write(bytes(out_str, "utf-8"))
         return
 
 
     def status_command(self, post_data, game=None, sort=None):
+        print('In status command')
+        out_str = ""
+        if (game): 
+            out_str = "Leaderboard for " + game + " is: <TBD>"
+        else:
+            out_str = "All leaderboards: <TBD>"
+        
+        self.wfile.write(bytes(out_str, "utf-8"))
         return
 
 
     def default_command(self, *args):
-        return self.status_command
+        return self.status_command(None)
 
     def parse_command(self, post_data):
         print('Post Text:', post_data['text'])
         my_args = post_data['text'][0].split(" ")
-        switchMap = {
+        switch_map = {
             'update' : self.update_command,
             'setgamesort' : self.setgamesort_command,
             'archive' : self.archive_command,
             'status' : self.status_command
-        }
-        command = switchMap.get(my_args[0], self.default_command)
+        } 
+
+        command = switch_map.get(my_args[0], self.default_command)
         my_args.pop(0)
         return command(post_data, *my_args)
 
