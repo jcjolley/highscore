@@ -8,13 +8,13 @@ import urllib
 
 class highScore_RequestHandler(BaseHTTPRequestHandler):
 
-  # GET
+    # GET
     def do_GET(self):
         # Send response status code
         self.send_response(200)
 
         # Send headers
-        self.send_header('Content-type', 'text/html')
+        self.send_header('Content-type', 'text/plain')
         self.end_headers()
 
         # Send message back to client
@@ -23,15 +23,31 @@ class highScore_RequestHandler(BaseHTTPRequestHandler):
         self.wfile.write(bytes(message, "utf8"))
         return
 
+    def update_command(self, post_data, game, score, imgurl=None):
+        out_str = "Congratulations " + post_data['user_name'] + ", Updating highscore for " + game + " to " + score
+        self.wfile.write(bytes(out_str, "utf-8"))
+        return
+
+    def parse_command(self, post_data):
+        print('Post Text:', post_text['text'])
+        my_args = post_data['text'][0].split(" ")
+        switchMap = {
+            'update' : self.update_command
+        }
+        command = switchMap[my_args[0]]
+        my_args.pop(0)
+        return command(post_data, *my_args)
+
+
     def do_POST(self):
         length = int(self.headers['Content-Length'])
         post_data = urllib.parse.parse_qs(
             self.rfile.read(length).decode('utf-8'))
         # You now have a dictionary of the post data
         print('POST data: ', post_data)
-        self.send_header('Content-type', 'text/html')
+        self.send_header('Content-type', 'text/plain')
         self.end_headers()
-        self.wfile.write(bytes("<html><body><p>Post Recieved</p></body></html>", "utf-8"))
+        self.parse_command(post_data)
 
 
 def run():
@@ -43,6 +59,5 @@ def run():
     httpd = HTTPServer(server_address, highScore_RequestHandler)
     print('running server...')
     httpd.serve_forever()
-
 
 run()
