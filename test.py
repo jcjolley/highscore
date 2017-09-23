@@ -83,7 +83,7 @@ class HighScoreRequestHandler(BaseHTTPRequestHandler):
         slackid = post_data['user_id'][0]
         teamid = post_data['team_id'][0]
         user_name, game_name, new_score = update_scores(cur, slackid, name, teamid, game, score)
-        out_str = "Congratulations " + user_name + ", Updating highscore for " + game_name + " to " + new_score
+        out_str = "Congratulations " + user_name + ", Updating highscore for " + game_name + " to " + str(new_score)
         self.wfile.write(bytes(out_str, "utf-8"))
         return
 
