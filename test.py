@@ -40,6 +40,7 @@ def getScores(cur, game):
 def get_or_create_user(cur, slackid, name, teamid):
     sql = """ call get_or_create_user(%s, %s, %s) """
     cur.execute(sql, (name, teamid, slackid))
+    db.commit()
     user_id = cur.fetchall()
     print("Fetched user_id: ", user_id[0][0])
     return user_id[0][0]
@@ -48,6 +49,7 @@ def get_or_create_user(cur, slackid, name, teamid):
 def get_or_create_game(cur, game, teamid):
     sql = """ call get_or_create_game(%s, %s) """
     cur.execute(sql, (game, teamid))
+    db.commit()
     game_id = cur.fetchall()
     print("Fetched game_id: ", game_id[0][0])
     return game_id[0][0]
@@ -58,6 +60,7 @@ def update_scores(cur, slackid, name, teamid, game, score):
     game_id = get_or_create_game(cur, game, teamid) 
     sql = """ call update_score(%s, %s, %s) """
     cur.execute(sql, (game_id, user_id, score))
+    db.commit()
     rows = cur.fetchall()
     for row in rows:
         user_name, game_name, new_score = row
