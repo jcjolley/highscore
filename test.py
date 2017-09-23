@@ -25,15 +25,18 @@ def getScores(cur, game):
 
     print('Score rows are: ', score_rows)
 
-
-    out_str = "Leaderboard: \n"
-    for row in score_rows:
-        name, score = row
-        print("Row is: ", row)
-        print ("Name: ", name, "Score: ", score)
-        out_str += name + ": " + str(score) + "\n"
-    
+    if (score_rows):
+        out_str = "Leaderboard: \n"
+        for row in score_rows:
+            name, score = row
+            print("Row is: ", row)
+            print("Name: ", name, "Score: ", score)
+            out_str += name + ": " + str(score) + "\n"
+    else:
+        out_str = "No scores for " + game + "."
     return out_str
+
+
 def get_or_create_user(cur, slackid, name, teamid):
     sql = """ call get_or_create_user(%s, %s, %s) """
     cur.execute(sql, (name, teamid, slackid))
