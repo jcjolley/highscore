@@ -1,5 +1,6 @@
 CREATE TABLE Teams (
     ID int NOT NULL AUTO_INCREMENT, 
+    SlackTeamID, varchar(255) NOT NULL,
     Domain varchar(255) NOT NULL,
     PRIMARY KEY (ID)
 );

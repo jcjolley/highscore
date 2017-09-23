@@ -34,6 +34,36 @@ def getScores(cur, game):
         out_str += name + ": " + str(score) + "\n"
     
     return out_str
+def get_or_create_user(cur, slackid, name, teamid):
+    sql = """ call get_or_create_user(%s, %s, %s) """
+    cur.execute(sql, (name, teamid, slackid))
+    user_id = cur.fetchall()
+    print("Fetched user_id: ", user_id)
+    return user_id
+
+
+def get_or_create_game(cur, game, teamid):
+    sql = """ call get_or_create_game(%s, %s) """
+    cur.execute(sql, (game, teamid))
+    game_id = cur.fetchall()
+    print("Fetched game_id: ", game_id)
+    return game_id
+
+
+def update_scores(cur, slackid, name, teamid, game, score):
+    user_id = get_or_create_user(cur, slackid, name, teamid)
+    game_id = get_or_create_game(cur, game, teamid) 
+    sql = """ INSERT INTO Scores (GameID, PlayerID, Score) VALUES (%s, %s, %d)
+              ON DUPLICATE KEY UPDATE Score = %d; 
+              SELECT p.Name, g.Name, s.Score 
+              FROM Scores as s 
+              JOIN Players as p ON p.ID = s.PlayerID 
+              JOIN Games as g ON g.ID = s.GameID 
+              WHERE g.Name = %s AND p.Name = %s; """
+    cur.execute(sql, (game_id, user_id, score, score, game, name))
+    user_name, game_name, new_score = cur.fetchall()
+    print(user_name, "'s New score for", game_name, "is", new_score)
+    return (user_name, game_name, new_score)
 
 class HighScoreRequestHandler(BaseHTTPRequestHandler):
 
@@ -53,7 +83,11 @@ class HighScoreRequestHandler(BaseHTTPRequestHandler):
         return
 
     def update_command(self, post_data, game, score, imgurl=None):
-        out_str = "Congratulations " + post_data['user_name'][0] + ", Updating highscore for " + game + " to " + score
+        name = post_data['user_name'][0]
+        slackid = post_data['user_id'][0]
+        teamid = post_data['team_id'][0]
+        user_name, game_name, new_score = update_scores(cur, slackid, name, teamid, game, score)
+        out_str = "Congratulations " + user_name + ", Updating highscore for " + game_name + " to " + new_score
         self.wfile.write(bytes(out_str, "utf-8"))
         return
 
