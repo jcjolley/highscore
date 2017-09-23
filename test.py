@@ -38,16 +38,16 @@ def get_or_create_user(cur, slackid, name, teamid):
     sql = """ call get_or_create_user(%s, %s, %s) """
     cur.execute(sql, (name, teamid, slackid))
     user_id = cur.fetchall()
-    print("Fetched user_id: ", user_id)
-    return user_id
+    print("Fetched user_id: ", user_id[0][0])
+    return user_id[0][0]
 
 
 def get_or_create_game(cur, game, teamid):
     sql = """ call get_or_create_game(%s, %s) """
     cur.execute(sql, (game, teamid))
     game_id = cur.fetchall()
-    print("Fetched game_id: ", game_id)
-    return game_id
+    print("Fetched game_id: ", game_id[0][0])
+    return game_id[0][0]
 
 
 def update_scores(cur, slackid, name, teamid, game, score):
