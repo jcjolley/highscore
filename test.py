@@ -53,14 +53,8 @@ def get_or_create_game(cur, game, teamid):
 def update_scores(cur, slackid, name, teamid, game, score):
     user_id = get_or_create_user(cur, slackid, name, teamid)
     game_id = get_or_create_game(cur, game, teamid) 
-    sql = """ INSERT INTO Scores (GameID, PlayerID, Score) VALUES (%s, %s, %s)
-              ON DUPLICATE KEY UPDATE Score = %s; 
-              SELECT p.Name, g.Name, s.Score 
-              FROM Scores as s 
-              JOIN Players as p ON p.ID = s.PlayerID 
-              JOIN Games as g ON g.ID = s.GameID 
-              WHERE g.Name = %s AND p.Name = %s; """
-    cur.execute(sql, (game_id, user_id, float(score), float(score), game, name))
+    sql = """ call update_score(%s, %s, %s) """
+    cur.execute(sql, (game_id, user_id, score))
     user_name, game_name, new_score = cur.fetchall()
     print(user_name, "'s New score for", game_name, "is", new_score)
     return (user_name, game_name, new_score)
