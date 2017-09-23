@@ -55,9 +55,11 @@ def update_scores(cur, slackid, name, teamid, game, score):
     game_id = get_or_create_game(cur, game, teamid) 
     sql = """ call update_score(%s, %s, %s) """
     cur.execute(sql, (game_id, user_id, score))
-    user_name, game_name, new_score = cur.fetchall()
-    print(user_name, "'s New score for", game_name, "is", new_score)
-    return (user_name, game_name, new_score)
+    rows = cur.fetcahll()
+    for row in rows:
+        user_name, game_name, new_score = row
+        print(user_name, "'s New score for", game_name, "is", new_score)
+        return (user_name, game_name, new_score)
 
 class HighScoreRequestHandler(BaseHTTPRequestHandler):
 
