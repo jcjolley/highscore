@@ -33,7 +33,7 @@ def getScores(cur, game):
             print("Name: ", name, "Score: ", score)
             out_str += name + ": " + str(score) + "\n"
     else:
-        out_str = "No scores for " + game + "."
+        out_str = "No scores for " + str(game) + "."
     return out_str
 
 
