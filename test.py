@@ -17,13 +17,14 @@ def getScores(cur, game):
               FROM Scores as s 
               JOIN Players as p ON p.ID = s.PlayerID 
               JOIN Games as g ON g.ID = s.GameID 
-              WHERE g.Name = %s; """
+              WHERE g.Name = %s
+              ORDER BY s.Score * g.sort; """
 
     cur.execute(sql, (game,))
     score_rows = cur.fetchall()
-
+    
     print('Score rows are: ', score_rows)
-
+    
     if (score_rows):
         out_str = "Leaderboard for " + str(game) + ": \n ```"
         for row in score_rows:

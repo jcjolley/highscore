@@ -18,7 +18,7 @@ CREATE TABLE Games (
     ID int NOT NULL AUTO_INCREMENT, 
     TeamID int NOT NULL,
     Name varchar(255) NOT NULL,
-    Sort int NOT NULL DEFAULT 1,
+    Sort int NOT NULL DEFAULT -1,
     Archived bit DEFAULT 0,
     PRIMARY KEY (ID),
     FOREIGN KEY (TeamID) REFERENCES Teams(ID)
