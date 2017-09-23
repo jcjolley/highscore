@@ -11,7 +11,6 @@ db = MySQLdb.connect(host="localhost",
                      passwd="highscores",
                      db="highscores")
 
-cur = db.cursor()
 
 def getScores(cur, game):
     sql = """ SELECT p.Name, s.Score 
@@ -99,9 +98,11 @@ class HighScoreRequestHandler(BaseHTTPRequestHandler):
         name = post_data['user_name'][0]
         slackid = post_data['user_id'][0]
         teamid = post_data['team_id'][0]
+        cur = db.cursor()
         user_name, game_name, new_score = update_scores(cur, slackid, name, teamid, game, score)
         out_str = "Congratulations " + user_name + ", Updating highscore for " + game_name + " to " + str(new_score)
         self.wfile.write(bytes(out_str, "utf-8"))
+        cur.close()
         return
 
     def setgamesort_command(self, post_data, game, sort):
@@ -118,6 +119,8 @@ class HighScoreRequestHandler(BaseHTTPRequestHandler):
     def status_command(self, post_data, game=None, sort=None):
         print('In status command')
         out_str = "THe default status command"
+
+        cur = db.cursor()
         if (game): 
             out_str = "Leaderboard for " + game + " is: "
             out_str += getScores(cur, game)
@@ -125,6 +128,7 @@ class HighScoreRequestHandler(BaseHTTPRequestHandler):
             out_str = "\n".join(get_all_scores(cur))
         
         self.wfile.write(bytes(out_str, "utf-8"))
+        cur.close();
         return
 
     def add_command(self, post_data, game):
