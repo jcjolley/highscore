@@ -60,7 +60,7 @@ def update_scores(cur, slackid, name, teamid, game, score):
               JOIN Players as p ON p.ID = s.PlayerID 
               JOIN Games as g ON g.ID = s.GameID 
               WHERE g.Name = %s AND p.Name = %s; """
-    cur.execute(sql, (game_id, user_id, score, score, game, name))
+    cur.execute(sql, (game_id, user_id, float(score), float(score), game, name))
     user_name, game_name, new_score = cur.fetchall()
     print(user_name, "'s New score for", game_name, "is", new_score)
     return (user_name, game_name, new_score)
