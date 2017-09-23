@@ -33,7 +33,7 @@ def getScores(cur, game):
             name, score = row
             print("Row is: ", row)
             print("Name: ", name, "Score: ", score)
-            out_str += str(count) + ". " + str(score) + " - " + name + "\n"                                                                       "\n"
+            out_str += str(count) + ". " + str(score) + " - " + name + "\n"
         out_str += "```\n"
     else:
         out_str = "No scores for " + str(game) + "."
