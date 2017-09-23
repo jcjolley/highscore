@@ -61,6 +61,16 @@ def update_scores(cur, slackid, name, teamid, game, score):
         print(user_name, "'s New score for", game_name, "is", str(new_score))
         return (user_name, game_name, new_score)
 
+def get_all_scores(cur):
+    sql = "SELECT Name from Games;"
+    cur.execute(sql)
+    rows = cur.fetchall()
+    score_strings = []
+    for game_name in rows:
+        score_strings.append(getScores(game_name))
+    
+
+
 class HighScoreRequestHandler(BaseHTTPRequestHandler):
 
     # GET
@@ -105,7 +115,7 @@ class HighScoreRequestHandler(BaseHTTPRequestHandler):
             out_str = "Leaderboard for " + game + " is: "
             out_str += getScores(cur, game)
         else:
-            out_str = "All leaderboards: <TBD>"
+            out_str = "\n".join(get_all_scores(cur))
         
         self.wfile.write(bytes(out_str, "utf-8"))
         return
