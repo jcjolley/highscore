@@ -68,6 +68,7 @@ def get_all_scores(cur):
     score_strings = []
     for game_name in rows:
         score_strings.append(getScores(cur, game_name))
+    return score_strings
     
 
 
