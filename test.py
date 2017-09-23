@@ -25,12 +25,14 @@ def getScores(cur, game):
     print('Score rows are: ', score_rows)
 
     if (score_rows):
-        out_str = "Leaderboard for " + str(game) + ": \n"
+        out_str = "Leaderboard for " + str(game) + ": \n ```"
         for row in score_rows:
             name, score = row
             print("Row is: ", row)
             print("Name: ", name, "Score: ", score)
+
             out_str += name + ": " + str(score) + "\n"
+        out_str += "```\n"
     else:
         out_str = "No scores for " + str(game) + "."
     return out_str
