@@ -26,7 +26,7 @@ def getScores(cur, game):
     print('Score rows are: ', score_rows)
 
     if (score_rows):
-        out_str = "Leaderboard: \n"
+        out_str = "Leaderboard for " + str(game) + ": \n"
         for row in score_rows:
             name, score = row
             print("Row is: ", row)
