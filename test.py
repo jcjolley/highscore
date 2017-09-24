@@ -56,9 +56,24 @@ def get_or_create_game(cur, game, teamid):
     return game_id[0][0]
 
 
+def get_game(cur, game, teamid):
+    sql = """ call get_game(%s, %s) """
+
+    try:
+        cur.execute(sql, (game, teamid))
+        game_id = cur.fetchall()
+        print("Fetched game_id: ", game_id[0][0])
+    except Exception:
+        game_id = -1
+
+    return game_id[0][0]
+
+
 def update_scores(cur, slackid, name, teamid, game, score):
     user_id = get_or_create_user(cur, slackid, name, teamid)
-    game_id = get_or_create_game(cur, game, teamid) 
+    game_id = get_game(cur, game, teamid)
+    if (game_id == -1 ):
+        raise Exception
     sql = """ call update_score(%s, %s, %s) """
     cur.execute(sql, (game_id, user_id, score))
     rows = cur.fetchall()
@@ -100,8 +115,11 @@ class HighScoreRequestHandler(BaseHTTPRequestHandler):
         slackid = post_data['user_id'][0]
         teamid = post_data['team_id'][0]
         cur = db.cursor()
-        user_name, game_name, new_score = update_scores(cur, slackid, name, teamid, game, score)
-        out_str = "Congratulations " + user_name + ", Updating highscore for " + game_name + " to " + str(new_score)
+        try:
+            user_name, game_name, new_score = update_scores(cur, slackid, name, teamid, game, score)
+            out_str = "Congratulations " + user_name + ", Updating highscore for " + game_name + " to " + str(new_score)
+        except Exception:
+            out_str = "We haven't started competing on " + game + "yet.  Please add it if you wish to track scores for it"
         self.wfile.write(bytes(out_str, "utf-8"))
         cur.close()
         db.commit()
