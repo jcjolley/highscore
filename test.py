@@ -119,7 +119,7 @@ class HighScoreRequestHandler(BaseHTTPRequestHandler):
             user_name, game_name, new_score = update_scores(cur, slackid, name, teamid, game, score)
             out_str = "Congratulations " + user_name + ", Updating highscore for " + game_name + " to " + str(new_score)
         except Exception:
-            out_str = "We haven't started competing on " + game + "yet.  Please add it if you wish to track scores for it"
+            out_str = "We haven't started competing on " + game + " yet.  If you wish to track scores for " + game + ", please add it using /highscore add <gamename>"
 
         self.wfile.write(bytes(out_str, "utf-8"))
         cur.close()
@@ -154,7 +154,14 @@ class HighScoreRequestHandler(BaseHTTPRequestHandler):
         return
 
     def add_command(self, post_data, game):
-        sql = "SELECT * FROM "
+        teamid = post_data['team_id'][0]
+        cur = db.cursor()
+        sql = get_or_create_game(cur, game, teamid)
+        rows = cur.fetchall();
+        cur.close()
+        db.commit()
+        out_str = "You may now compete on " + game + "!"
+        self.wfile.write(bytes(out_str, "utf-8"))
 
     def default_command(self, *args):
         return self.status_command(None)
@@ -166,7 +173,8 @@ class HighScoreRequestHandler(BaseHTTPRequestHandler):
             'update' : self.update_command,
             'setgamesort' : self.setgamesort_command,
             'archive' : self.archive_command,
-            'status' : self.status_command
+            'add' : self.add_command,
+            'status' : self.status_command,
         } 
 
         command = switch_map.get(my_args[0], self.default_command)
